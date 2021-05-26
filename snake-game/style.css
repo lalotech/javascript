@@ -1,27 +1,36 @@
 html,
 body {
-    width: 100%;
-    height: 100%;
-    background-color: #000000;
-    overflow: hidden;
+  width: 100%;
+  height: 100%;
+  background-color: #000000;
+  overflow: hidden;
 }
 
 button,
 input,
 .t {
-    -webkit-border-radius: 10px;
-    -moz-border-radius: 10px;
-    border-radius: 10px;
-    border: solid 2px #00FF00;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+  border: solid 2px #00ff00;
 }
 
 .snake-panel,
 .k,
 .btn {
-    -webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
-    border-radius: 5px;
-    border: solid 2px #00FF00;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+}
+.btn-ctl,
+.btn-player-1,
+.snake-panel {
+  border: solid 2px #00ff00;
+  color: #00ff00;
+}
+.btn-player-2 {
+  border: solid 2px #2a55ff;
+  color: #2a55ff !important;
 }
 
 .controls,
@@ -30,68 +39,68 @@ input,
 .wasd,
 .btn,
 .lb-mode {
-    text-align: center;
-    color: #00FF00;
+  text-align: center;
+  color: #00ff00;
 }
 
 button,
 input {
-    background-color: #000000;
-    width: 180px;
-    min-height: 36px;
-    height: 36px;
+  background-color: #000000;
+  width: 180px;
+  min-height: 36px;
+  height: 36px;
 }
 
 input:active {
-    border: none;
+  border: none;
 }
 
 input {
-    margin: 0;
-    padding: 0;
+  margin: 0;
+  padding: 0;
 }
 
 button {
-    width: 186px;
-    height: 38px;
-    cursor: pointer;
+  width: 186px;
+  height: 38px;
+  cursor: pointer;
 }
 
 .col {
-    padding-right: 5px;
-    padding-left: 5px;
+  padding-right: 5px;
+  padding-left: 5px;
 }
 
 .btn {
-    margin-bottom: 3px;
-    min-width: 60px;
+  margin-bottom: 3px;
+  min-width: 60px;
 }
 
 .wasd {
-    font-weight: bold;
+  font-weight: bold;
 }
 
 .green {
-    color: #00FF00;
+  color: #00ff00;
 }
 
 .red,
 .btn:hover {
-    color: #FF002A;
+  color: #ff002a;
 }
 
 .btn:hover {
-    -webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
-    border-radius: 5px;
-    border: solid 2px #FF002A;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  border: solid 2px #ff002a;
 }
 
 .flex-container {
-    display: -webkit-flex;
-    display: flex;
-    -webkit-justify-content: center;
-    justify-content: center;
-    -webkit-align-items: center;
-    align-items: center;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-justify-content: center;
+  justify-content: center;
+  -webkit-align-items: center;
+  align-items: center;
 }
