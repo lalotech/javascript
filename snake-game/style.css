@@ -72,8 +72,9 @@ button {
 }
 
 .btn {
-  margin-bottom: 3px;
   min-width: 60px;
+  margin: 0px 3px;
+  margin-bottom: 3px;
 }
 
 .wasd {
@@ -85,11 +86,13 @@ button {
 }
 
 .red,
-.btn:hover {
+.btn:hover,
+.enable {
   color: #ff002a;
 }
 
-.btn:hover {
+.btn:hover,
+.enable {
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
   border-radius: 5px;
@@ -103,4 +106,10 @@ button {
   justify-content: center;
   -webkit-align-items: center;
   align-items: center;
+}
+.show {
+  display: block;
+}
+.hidden {
+  display: none;
 }

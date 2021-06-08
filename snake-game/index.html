@@ -27,15 +27,16 @@
                 <canvas id="title-panel" width="360" height="120"></canvas>
             </div>
             <div class="green text-center">
-                <b><i>V 1.0.0 date 03/05/2020</i></b>
-                <b><i>power by lalotech. 2020</i>
+                <!-- b><i>V 1.0.0 date 03/05/2020</i></b -->
+                <b><i>V 1.1.0 date 08/06/2021</i></b>
+                <b><i>power by lalotech. 2021</i>
             </div>
         </div>
         <div class="col-xs-12 col-md-3 col-lg-3 col">
             <div class="pull-right">
                 <div style="margin-bottom: 5px;" class="pull-right">
                     <div>
-                        <span class="btn btn-ctl" onclick="onPause()" title="PAUSE">
+                        <span id="pause-id" class="btn btn-ctl" onclick="onPause()" title="PAUSE">
                             &nbsp;<i class="fa fa-2x fa-pause-circle" aria-hidden="true"></i>
                         </span>
                     </div>
@@ -78,27 +79,32 @@
             </div>
             <div>
                 <div class="pull-right">
-                    <span class="btn btn-ctl" onclick="onMode1()" title="CROSS MODE">
+                    <span id="cross-mode-id" class="btn btn-ctl" onclick="onMode('cross')" title="CROSS MODE">
                         &nbsp;<i class="fa fa-2x fa-arrows" aria-hidden="true"></i>
                     </span>
                 </div>
                 <div class="pull-right">
-                    <span class="btn btn-ctl" onclick="onMode2()" title="BOX MODE">
+                    <span id="box-mode-id" class="btn btn-ctl" onclick="onMode('box')" title="BOX MODE">
                         &nbsp;<i class="fa fa-2x fa-codepen" aria-hidden="true"></i>
                     </span>
                 </div>
-                <div class="pull-right lb-mode" style="margin-right: 15px;">CROSS MODE</div>
+            <div class="pull-right">
+                    <span id="two-mode-id" class="btn btn-ctl" onclick="onMode('two')" title="TWO PLAYER">
+                        &nbsp;<i class="fa fa-2x fa-users" aria-hidden="true"></i>
+                    </span>
+                </div>
+                <div class="pull-right lb-mode" style="margin-right: 15px;"></div>
                 <div style="clear: both;"></div>
             </div>
             <div>
-                <div class="lb-mode">
-                    On this mode you can cross the walls.
+                <div id="txt-id" class="lb-mode">
+                    &nbsp;
                 </div>
                 <div style="clear: both;"></div>
             </div>
         </div>
         <div class="col-xs-12 col-md-3 col-lg-3 col">
-            <div class="wasd" style="margin-left: 35px;">
+            <div id="ctrl-p1" class="wasd" style="margin-left: 35px;">
                 <div class="row">
                     <div class="pull-left">
                         <span class="btn btn-player-1" title="W">
@@ -128,7 +134,7 @@
                     </div>
                 </div>
             </div> <!-- end WASD panel -->
-            <div class="wasd" style="margin-left: 35px;">
+            <div id="ctrl-p2" class="wasd" style="margin-left: 35px;">
                 <div class="row">
                     <div class="pull-left">
                         &nbsp;
@@ -144,21 +150,21 @@
                 <div class="row">
                     <div class="pull-left">
                         <span class="btn btn-player-2" title="A">
-                        &nbsp;<i class="fa fa-2x fa-arrow-up" aria-hidden="true"></i>
+                        &nbsp;<i class="fa fa-2x fa-arrow-left" aria-hidden="true"></i>
                     </span>
                     </div>
                 </div>
                 <div class="row">
                     <div class="pull-left">
                         <span class="btn btn-player-2" title="S">
-                        &nbsp;<i class="fa fa-2x fa-arrow-up" aria-hidden="true"></i>
+                        &nbsp;<i class="fa fa-2x fa-arrow-right" aria-hidden="true"></i>
                     </span>
                     </div>
                 </div>
                 <div class="row">
                     <div class="pull-left">
                         <span class="btn btn-player-2" title="D">
-                        &nbsp;<i class="fa fa-2x fa-arrow-up" aria-hidden="true"></i>
+                        &nbsp;<i class="fa fa-2x fa-arrow-down" aria-hidden="true"></i>
                     </span>
                     </div>
                 </div>

@@ -17,7 +17,20 @@ var options = {
 var frameSpeed = 200;
 var snakeWidth = 10;
 var snakeSpace = 1;
-var direction = 4; // 1,2,3,4 WASD controls
+var CELL_INDEX = {
+  X: 0,
+  Y: 1,
+  WIDTH: 2,
+  HEIGHT: 3,
+  DIRECTION: 4,
+};
+var DIRECTION = {
+  TOP: 1,
+  LEFT: 2,
+  BOTTOM: 3,
+  RIGHT: 4,
+};
+var DEFAULT_DIRECTION = DIRECTION.RIGHT; // 1,2,3,4 WASD controls
 var startSnakeSize = 3; //snake length
 canvas.width = cw;
 canvas.height = ch;
@@ -29,6 +42,8 @@ var pause = false;
 var crash = false;
 var crossMode = true;
 var player2Enable = false;
+var gameStarted = false;
+var gameMode = "single";
 
 var speed = 0;
 var snakes = [];
@@ -69,13 +84,22 @@ function frame() {
 
   //CROSS MODE
   if (crossMode) {
-    crossMode();
+    crossModeAllowed();
   }
 }
 
 /***********************************************
  *   UTIL
  ***********************************************/
+function addClass(elementId, className) {
+  let clss = document.getElementById(elementId).className;
+  document.getElementById(elementId).className = clss + " " + className;
+}
+
+function removeClass(elementId, className) {
+  let clss = document.getElementById(elementId).className;
+  document.getElementById(elementId).className = clss.replace(className, "");
+}
 
 function resetFrame() {
   window.clearInterval(frameint);
@@ -86,6 +110,10 @@ function resetFrame() {
 
 function init() {
   snakes = [];
+  //clean enables
+  for (const el_id of ["cross-mode-id", "two-mode-id", "box-mode-id"]) {
+    removeClass(el_id, "enable");
+  }
 
   //snake positions
   spx = cw / 2;
@@ -97,24 +125,42 @@ function init() {
   //player 2
   if (player2Enable) {
     snakes.push(new Snake("#2A55FF", ctl_arrows, spx, spy + 20));
+    removeClass("ctrl-p2", "hidden");
+    addClass("ctrl-p2", "show");
+    addClass("two-mode-id", "enable");
+  } else {
+    removeClass("ctrl-p2", "show");
+    addClass("ctrl-p2", "hidden");
+  }
+
+  //cross-mode
+  if (crossMode) {
+    addClass("cross-mode-id", "enable");
+    document.getElementById("txt-id").innerHTML =
+      "CROSS MODE<br/> On this mode you can cross the walls.";
+  } else {
+    //box -mode
+    addClass("box-mode-id", "enable");
+    document.getElementById("txt-id").innerHTML =
+      "BOX MODE<br/> On this mode you can't cross the walls be carefull";
   }
 
   nsn = undefined;
   buildNewSlotSnake();
   crash = false;
+  gameStarted = true;
 }
 
 function checkCollision() {
   for (const snake of snakes) {
     for (var i = 1; i < snake.cells.length; i++) {
       if (
-        snake.cells[0][0] == snake.cells[i][0] &&
-        snake.cells[0][1] == snake.cells[i][1]
+        (snake.cells[0][0] == snake.cells[i][0] &&
+          snake.cells[0][1] == snake.cells[i][1]) ||
+        (!crossMode ? snake.cells[0][0] == cw : false)
       ) {
         console.log("crash!!");
         crash = true;
-        //drawGameOver();
-        //window.clearInterval(frameint);
       }
     }
   }
@@ -128,6 +174,7 @@ function checkEat() {
     ) {
       //nsn[4] = sn[sn.length-1][4];
       var n = JSON.parse(JSON.stringify(snake.cells[snake.cells.length - 1]));
+      //console.log(JSON.stringify(snake.cells[snake.cells.length - 1]));
       switch (n[4]) {
         case 4:
           n[0] = n[0] - snakeWidth;
@@ -153,7 +200,13 @@ function buildSnake(size, x, y) {
   var b = [];
   for (var i = 0; i < size; i++) {
     //sn[i] = [snakeWidth*i*-1+spx-snakeSpace*i,spy,snakeWidth,snakeWidth,4]; // direction right
-    b[i] = [snakeWidth * i * -1 + x, y, snakeWidth, snakeWidth, 4]; // direction right
+    b[i] = [
+      snakeWidth * i * -1 + x,
+      y,
+      snakeWidth,
+      snakeWidth,
+      DIRECTION.RIGHT,
+    ]; // direction right
   }
   //console.log(sn);
   return b;
@@ -178,21 +231,33 @@ function buildNewSlotSnake() {
   //nsn = [390, 390, snakeWidth, snakeWidth, 4];
 }
 
-var crossMode = function () {
+var crossModeAllowed = function () {
   for (const snake of snakes) {
     for (const cell of snake.cells) {
-      if (cell[0] == cw - snakeWidth && cell[4] == 4) {
+      if (
+        cell[CELL_INDEX.X] == cw - snakeWidth &&
+        cell[CELL_INDEX.DIRECTION] == DIRECTION.RIGHT
+      ) {
         //right
-        cell[0] = -snakeWidth;
-      } else if (cell[1] == ch - snakeWidth && cell[4] == 3) {
+        cell[CELL_INDEX.X] = -snakeWidth;
+      } else if (
+        cell[CELL_INDEX.Y] == ch - snakeWidth &&
+        cell[CELL_INDEX.DIRECTION] == DIRECTION.BOTTOM
+      ) {
         //buttom
-        cell[1] = -snakeWidth;
-      } else if (cell[0] == 0 && cell[4] == 2) {
+        cell[CELL_INDEX.Y] = -snakeWidth;
+      } else if (
+        cell[CELL_INDEX.X] == CELL_INDEX.X &&
+        cell[CELL_INDEX.DIRECTION] == DIRECTION.LEFT
+      ) {
         //left
-        cell[0] = cw;
-      } else if (cell[1] == 0 && cell[4] == 1) {
+        cell[CELL_INDEX.X] = cw;
+      } else if (
+        cell[CELL_INDEX.Y] == 0 &&
+        cell[CELL_INDEX.DIRECTION] == DIRECTION.TOP
+      ) {
         //top
-        cell[1] = ch;
+        cell[CELL_INDEX.Y] = ch;
       }
     }
   }
@@ -201,6 +266,18 @@ var crossMode = function () {
 /***********************************************
  *   EVENTS
  ***********************************************/
+function onMode(mode) {
+  console.log("mode " + mode);
+  if (mode === "cross") {
+    crossMode = true;
+  } else if (mode == "two") {
+    player2Enable = !player2Enable;
+  } else if (mode === "box") {
+    crossMode = false;
+  }
+
+  onReset();
+}
 
 function onUpSpeed() {
   if (frameSpeed > 10) {
@@ -229,6 +306,11 @@ function onReset() {
 
 function onPause() {
   pause = !pause;
+  if (pause) {
+    addClass("pause-id", "enable");
+  } else {
+    removeClass("pause-id", "enable");
+  }
 }
 
 function onPressKey(evt) {
@@ -266,25 +348,25 @@ function Snake(color, keys, x, y) {
   };
   this.draw = function () {
     ctx.fillStyle = color;
-    for (i in this.cells) {
+    for (const cell of this.cells) {
       //console.log(sn[i][4]);
-      switch (this.cells[i][4]) {
-        case 4:
-          this.cells[i][0] = this.cells[i][0] + snakeWidth;
+      switch (cell[CELL_INDEX.DIRECTION]) {
+        case DIRECTION.RIGHT:
+          cell[CELL_INDEX.X] = cell[CELL_INDEX.X] + snakeWidth;
           break;
-        case 3:
-          this.cells[i][1] = this.cells[i][1] + snakeWidth;
+        case DIRECTION.BOTTOM:
+          cell[CELL_INDEX.Y] = cell[CELL_INDEX.Y] + snakeWidth;
           break;
-        case 2:
-          this.cells[i][0] = this.cells[i][0] - snakeWidth;
+        case DIRECTION.LEFT:
+          cell[CELL_INDEX.X] = cell[CELL_INDEX.X] - snakeWidth;
           break;
-        case 1:
-          this.cells[i][1] = this.cells[i][1] - snakeWidth;
+        case DIRECTION.TOP:
+          cell[CELL_INDEX.Y] = cell[CELL_INDEX.Y] - snakeWidth;
           break;
       }
       ctx.fillRect(
-        this.cells[i][0],
-        this.cells[i][1],
+        cell[CELL_INDEX.X],
+        cell[CELL_INDEX.Y],
         snakeWidth - snakeSpace,
         snakeWidth - snakeSpace
       );
@@ -301,7 +383,12 @@ function Snake(color, keys, x, y) {
 /***********************************************
  *   DRAW
  ***********************************************/
-
+function drawMessage(message, cb) {
+  var r = confirm(message);
+  if (r == true) {
+    cb();
+  }
+}
 function drawNewSlotSnake() {
   ctx.fillStyle = "#FF002A";
   ctx.fillRect(nsn[0], nsn[1], snakeWidth, snakeWidth);
